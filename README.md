@@ -20,6 +20,9 @@ madlibs and videos.
    - the **Project URL**
    - the **publishable key** (or the legacy **anon public** key)
 
+If you set Supabase up before and `supabase/setup.sql` has changed since, run the whole file
+again the same way. It's safe to re-run: existing recordings and videos are kept.
+
 ### 2. Add your keys
 Edit `js/config.js` and paste the two values in. The publishable/anon key is designed to be
 public, so it's fine to commit it.
@@ -39,8 +42,8 @@ Videos are under **Storage → videos**. Each one is watchable at
 
 ## Editing madlibs
 All madlibs live in `js/templates.js`. Each has `blanks` (what the user fills in) and `lines`.
-Each line has `text` (what they read) and `how` (the reading direction shown under the video
-while that line is up, e.g. "Whisper it"). Put `{key}` in a line's text to insert a blank.
+Each line has `text` (what they read) and `how` (the reading direction that pops up before it,
+e.g. "Whisper it"). Leave `how` off to continue the previous line's section without a new pop-up. Put `{key}` in a line's text to insert a blank.
 Readers only ever see the current line — never the next one. Keep lines to about one sentence.
 Each line stays on screen for 1.5 s + 0.35 s per word (2.5–9 s); change that in
 `lineDurationMs()` in the same file.

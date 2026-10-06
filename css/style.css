@@ -26,25 +26,17 @@ body {
   line-height: 1.5;
 }
 
-h1, h2, .logo, .template-title, .countdown { font-family: var(--font-display); }
+h1, h2, .template-title, .countdown { font-family: var(--font-display); }
 h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); line-height: 1.15; margin: 0.4em 0 0.3em; }
 h2 { font-size: 1.2rem; }
 .lead { color: var(--ink-2); margin: 0 0 1.4em; }
 code { background: rgba(0,0,0,.3); padding: .1em .35em; border-radius: 6px; }
 
-.site-header {
-  padding: 14px 16px;
-  padding-top: max(14px, env(safe-area-inset-top));
-  max-width: 640px;
-  margin: 0 auto;
-}
-.logo { color: var(--ink); text-decoration: none; font-size: 1.4rem; font-weight: 700; }
-.logo span { color: var(--accent); }
-
 main {
   max-width: 640px;
   margin: 0 auto;
-  padding: 0 16px calc(32px + env(safe-area-inset-bottom));
+  padding: max(16px, env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom));
+  text-align: center;
 }
 
 /* --------------------------------------------------------- buttons */
@@ -74,12 +66,51 @@ main {
   background: none; border: 0; color: var(--ink-2); padding: 8px 0; font: inherit; cursor: pointer;
 }
 
+/* testing shortcut (only shown with ?dev in the URL) */
+.dev-tools {
+  position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 10;
+  display: grid; gap: 6px; justify-items: end;
+}
+.dev-skip {
+  padding: 8px 14px; border-radius: 999px; border: 1px dashed var(--ink-2);
+  background: rgba(0,0,0,.55); color: var(--ink); font: 600 .85rem var(--font-body); cursor: pointer;
+}
+body.recording-mode .dev-tools { display: none; }
+
+/* --------------------------------------------------------- intro */
+/* spacing lives on the heading so it sits in exactly the same spot on every screen that has it */
+.intro-title {
+  font-size: clamp(2.2rem, 10vw, 4.5rem); line-height: 1; letter-spacing: .01em;
+  color: var(--accent); margin: 4vh 0 .4em;
+}
+/* BRAAAIN and SHOW!? each stay whole; when the heading doesn't fit on one line it breaks between them */
+.intro-title span { white-space: nowrap; }
+/* narrow screens: bigger, so it sits on two lines as BRAAAIN / SHOW!? */
+@media (max-width: 480px) {
+  .intro-title { font-size: clamp(2.6rem, 17vw, 4.5rem); line-height: .95; }
+}
+.view-intro .lead { font-size: 1.1rem; }
+.intro-step { transition: opacity .4s ease; }
+.intro-step.faded { opacity: 0; }
+.intro-part { font-size: clamp(1.5rem, 6vw, 2rem); margin: 0 0 .5em; }
+.perm-help { margin-top: 8px; line-height: 1.45; }
+@media (prefers-reduced-motion: reduce) { .intro-step { transition: none; } }
+
+.warmup-prompt { display: block; margin-top: 8px; font: 700 clamp(1.6rem, 7vw, 2.2rem) var(--font-display); margin-bottom: 14px; }
+.warmup-input {
+  width: 100%; min-height: 60px; padding: 0 16px; border-radius: 14px;
+  border: 2px solid var(--accent); background: rgba(0,0,0,.25); color: var(--ink);
+  font-size: 1.4rem; text-align: center;
+}
+.warmup-input:focus { outline: none; box-shadow: 0 0 0 4px rgba(191, 197, 74, .3); }
+.warmup-count { color: var(--ink-2); font-size: .9rem; margin: 10px 0 0; }
+
 /* --------------------------------------------------------- pick */
 .card-list { display: grid; gap: 14px; }
 .template-card {
   display: grid;
   gap: 4px;
-  text-align: left;
+  text-align: center;
   width: 100%;
   padding: 20px;
   border-radius: var(--radius);
@@ -97,12 +128,13 @@ main {
 
 /* --------------------------------------------------------- forms */
 .fields { display: grid; gap: 14px; }
-.form-section { margin: 28px 0 12px; }
+.fields:not(:empty) + .fields-about { margin-top: 28px; }
 .field { display: grid; gap: 6px; }
 .field span { font-weight: 600; }
 .field small { color: var(--ink-2); font-weight: 400; }
 .field input {
   width: 100%;
+  text-align: center;
   min-height: 52px;
   padding: 0 14px;
   border-radius: 12px;
@@ -118,12 +150,70 @@ main {
 .notice-error { background: rgba(232, 85, 63, .18); border: 1px solid var(--pink); }
 
 /* --------------------------------------------------------- instructions */
-.steps { padding-left: 1.3em; margin: 0 0 24px; display: grid; gap: 10px; }
-.steps li::marker { color: var(--accent); font-weight: 700; }
+/* tutorial: numbered cards, each with a small picture of what happens */
+.tutorial { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 14px; counter-reset: tut; }
+.tut-step {
+  counter-increment: tut; position: relative;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 18px 18px 16px;
+}
+.tut-step::before {
+  content: counter(tut); position: absolute; top: 12px; left: 12px;
+  width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--accent); color: #2e1f0a; font: 700 .95rem var(--font-display);
+}
+.tut-step h3 { font: 700 1.25rem var(--font-display); margin: 12px 0 4px; }
+.tut-step p { margin: 0; color: var(--ink-2); }
+.tut-art { display: flex; justify-content: center; align-items: center; gap: 18px; min-height: 120px; }
+
+.tut-take { display: grid; justify-items: center; line-height: 1; }
+.tut-rec { color: #ff4d4d; font-weight: 700; font-size: .85rem; background: rgba(0,0,0,.35); padding: 4px 10px; border-radius: 999px; animation: blink 1.2s infinite; }
+.tut-take-num { font: 700 4rem var(--font-display); color: var(--accent); margin-top: 6px; }
+.tut-take-label { font: 700 .9rem var(--font-display); text-transform: uppercase; letter-spacing: .12em; color: var(--ink-2); }
+
+/* a tiny phone "camera view" with a face silhouette, reusing the real cue + line styles */
+.mock-phone {
+  position: relative; width: 150px; aspect-ratio: 9 / 14; border-radius: 16px; overflow: hidden;
+  border: 3px solid rgba(0,0,0,.45);
+  background:
+    radial-gradient(circle at 50% 42%, #a98a63 0 17%, transparent 17.5%),
+    radial-gradient(ellipse 48% 30% at 50% 100%, #a98a63 0 98%, transparent 100%),
+    linear-gradient(#5c4a3a, #3b2d22);
+}
+.mock-phone .cue { top: 10px; padding: 4px 10px; border-radius: 10px; max-width: calc(100% - 12px); }
+.mock-phone .cue-label { font-size: .5rem; }
+.mock-phone .cue-how { font-size: .7rem; }
+.mock-phone .cue.cue-big { top: 50%; padding: 8px 12px; }
+.mock-phone .cue.cue-big .cue-how { font-size: .95rem; }
+.mock-phone .cue.cue-big .cue-label { font-size: .6rem; }
+.tut-cue-pop { animation: cue-pop .45s ease-out, tut-pulse 2.4s ease-in-out .45s infinite; }
+@keyframes tut-pulse { 50% { scale: 1.06; } }
+.mock-line {
+  position: absolute; left: 6px; right: 6px; bottom: 14px;
+  background: rgba(0,0,0,.62); border-radius: 8px; padding: 6px 6px;
+  color: #fff; font-weight: 700; font-size: .72rem; line-height: 1.25;
+}
+.mock-timer { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255,255,255,.15); }
+.mock-timer div { height: 100%; background: var(--accent); animation: tut-fill 3s linear infinite; }
+@keyframes tut-fill { from { width: 0; } to { width: 100%; } }
+
+.tut-icons svg, .tut-share svg {
+  width: 56px; height: 56px; fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+}
+.tut-icons svg .fill { fill: var(--accent); stroke: none; }
+.tut-share {
+  display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 10px; border-radius: 999px;
+  background: rgba(0,0,0,.25); border: 1px solid var(--line); color: var(--ink-2); font-size: .9rem;
+}
+.tut-share svg { width: 32px; height: 32px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tut-rec, .tut-cue-pop, .mock-timer div { animation: none; }
+  .mock-timer div { width: 60%; }
+}
 .hl { color: var(--accent); font-weight: 700; }
 
 /* --------------------------------------------------------- record */
-body.recording-mode .site-header { display: none; }
 body.recording-mode main { padding-top: max(8px, env(safe-area-inset-top)); max-width: none; }
 
 .view-record { display: flex; flex-direction: column; align-items: center; }
@@ -156,6 +246,25 @@ body.recording-mode main { padding-top: max(8px, env(safe-area-inset-top)); max-
 .line-count:empty { display: none; }
 @keyframes blink { 50% { opacity: .35; } }
 
+/* reading direction: shown on the preview only — it is not drawn into the recorded video */
+.cue {
+  position: absolute; left: 50%; top: 48px; transform: translateX(-50%);
+  width: max-content; max-width: calc(100% - 24px);
+  display: grid; justify-items: center; gap: 2px;
+  padding: 8px 18px; border-radius: 18px;
+  background: var(--accent); color: #2e1f0a;
+  box-shadow: 0 6px 24px rgba(0,0,0,.45);
+  text-align: center; pointer-events: none;
+  transition: top .35s ease, transform .35s ease, padding .35s ease;
+}
+.cue-label { font: 700 .75rem var(--font-display); text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+.cue-how { font: 700 1.25rem/1.2 var(--font-display); transition: font-size .35s ease; }
+.cue.cue-big { top: 50%; transform: translate(-50%, -50%); padding: 18px 26px; }
+.cue.cue-big .cue-how { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+.cue.cue-big .cue-label { font-size: 1rem; }
+.cue.pop { animation: cue-pop .45s ease-out; }
+@keyframes cue-pop { from { scale: .6; opacity: 0; } 60% { scale: 1.06; opacity: 1; } to { scale: 1; } }
+
 .countdown {
   position: absolute; inset: 0;
   display: grid; place-items: center;
@@ -171,11 +280,6 @@ body.recording-mode main { padding-top: max(8px, env(safe-area-inset-top)); max-
 
 .record-controls { width: 100%; max-width: 520px; }
 .next-line { margin: 12px 0 0; color: var(--ink-2); text-align: center; min-height: 3em; }
-.next-line .how { color: var(--ink); font: 600 1.35rem var(--font-display); }
-.next-label {
-  display: inline-block; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
-  color: var(--accent); margin-right: 6px;
-}
 
 /* the raw camera feed only feeds the canvas — keep it technically on-screen so iOS keeps it running */
 .camera-source {
@@ -213,5 +317,7 @@ body.recording-mode main { padding-top: max(8px, env(safe-area-inset-top)); max-
 .byline { color: var(--accent); font-weight: 600; margin: 0 0 16px; }
 .script { margin-top: 24px; background: var(--card); border-radius: var(--radius); padding: 4px 18px; }
 .script summary { cursor: pointer; padding: 12px 0; font-weight: 600; }
-.script ol { padding-left: 1.3em; color: var(--ink-2); }
+.script ol { list-style-position: inside; padding: 0; color: var(--ink-2); }
 .cta { margin-top: 28px; text-align: center; }
+.fulltext { margin: 0 0 8px; text-align: center; }
+.fulltext p { margin: 0 0 1em; line-height: 1.55; }

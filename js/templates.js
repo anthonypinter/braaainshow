@@ -2,6 +2,72 @@
 // Each line has `text` (what they read) and `how` (the reading direction shown with it).
 // Use {key} in a line's text to drop in that blank's answer. A key can be reused.
 
+// Warm-up prompts, answered one at a time on the welcome screen.
+export const WARMUP = ['Noun', 'Action verb', 'Cute Animal', 'Human name', 'Horrible Food'];
+
+// The real test: these blanks are asked one at a time (like the warm-up), then fill the madlib.
+export const MAIN_MADLIB = {
+  id: 'braaainshow',
+  title: 'BRAAAINSHOW!?',
+  blanks: [
+    { key: 'adj1', label: 'Adjective' },
+    { key: 'sound', label: 'Sound' },
+    { key: 'geo', label: 'Geographic Feature' },
+    { key: 'message', label: 'Type of Message' },
+    { key: 'bodypart', label: 'Body Part' },
+    { key: 'verb1', label: 'Action Verb' },
+    { key: 'verb2', label: 'Different Action Verb' },
+    { key: 'valuable', label: 'Something Valuable' },
+    { key: 'gross', label: 'Something Gross' },
+    { key: 'attribute', label: 'Human Attribute' },
+    { key: 'food', label: 'Food' },
+    { key: 'person', label: 'Type of person' },
+    { key: 'verbing', label: 'Verb ending in ing' },
+    { key: 'fear', label: 'Rational fear' },
+    { key: 'pets', label: 'Weird pets' },
+    { key: 'adj2', label: 'Adjective' },
+    { key: 'pluralnoun', label: 'Plural noun' },
+  ],
+  // A line with `how` starts a new section: its direction pops up first. Lines without `how`
+  // continue the same section straight away, with the direction still shown.
+  // The whole theme as shown on the final screen: stanzas of lines, with the same {key} blanks.
+  fullText: [
+    [
+      'The {adj1} {sound} erupts from {geo} of brain',
+      'The {message} is issued, your {bodypart} in the chain!',
+      '{verb1} the piñata! {verb2} treasures insane!',
+      '{valuable} or {gross}? Your pleasure? Your pain?',
+    ],
+    ['BRAAAINSHOW!?', 'Human {attribute} tested! Opponents all bested!'],
+    ['BRAAAINSHOW!?', '{food} digested! {person} arrested!'],
+    [
+      'Braaainshow!',
+      '{verbing} and {fear} and {pets} and prizes and',
+      '{adj2} {pluralnoun} in all shapes and sizes on',
+    ],
+    ['BRAAAINSHOW!?'],
+    ['(explosion sound)'],
+  ],
+  lines: [
+    { text: 'We Like it!', how: 'happy' },
+    { text: 'The {adj1} {sound} erupts from {geo} of brain', how: 'Healthy Enthusiasm' },
+    { text: 'The {message} is issued, your {bodypart} in the chain!' },
+    { text: '{verb1} the piñata! {verb2} treasures insane!', how: 'MORE ENTHUSIASM' },
+    { text: '{valuable} or {gross}? Your pleasure? Your pain?' },
+    { text: 'BRAAAINSHOW!?', how: 'IN A MUSICAL' },
+    { text: 'Human {attribute} tested! Opponents all bested!' },
+    { text: 'BRAAAINSHOW!?', how: 'ANGRY OLD MAN' },
+    { text: '{food} digested! {person} arrested!' },
+    { text: 'Braaainshow!', how: 'CHILDREN’S TV SHOW HOST' },
+    { text: '{verbing} and {fear} and {pets} and prizes and' },
+    { text: '{adj2} {pluralnoun} in all shapes and sizes on' },
+    { text: 'Braaainshow', how: 'whispered like a secret' },
+    { text: 'BRAAAINSHOW!?', how: 'SHOUTED IN TRIUMPH' },
+    { text: 'Braaainshow', how: 'As normal as possible' },
+    { text: 'make a funny explosion sound effect', how: 'with your mouth' },
+  ],
+};
+
 export const TEMPLATES = [
   {
     id: 'space-chef',
@@ -92,13 +158,30 @@ export const TEMPLATES = [
   },
 ];
 
+/** The full text as <p> stanzas, with the reader's words highlighted (final screen + watch page). */
+export function fullTextNodes(stanzas, words) {
+  return stanzas.map((stanza) => {
+    const p = document.createElement('p');
+    stanza.forEach((line, i) => {
+      if (i) p.append(document.createElement('br'));
+      for (const seg of fillLine(line, words)) {
+        p.append(seg.filled ? Object.assign(document.createElement('span'), { className: 'hl', textContent: seg.text }) : seg.text);
+      }
+    });
+    return p;
+  });
+}
+
 /** Split a template line into segments, marking which parts came from the user. */
 export function fillLine(line, words) {
   const segs = [];
   let last = 0;
   for (const m of line.matchAll(/\{(\w+)\}/g)) {
     if (m.index > last) segs.push({ text: line.slice(last, m.index), filled: false });
-    segs.push({ text: (words[m[1]] ?? '').trim(), filled: true });
+    let word = (words[m[1]] ?? '').trim();
+    // capitalize an answer that starts the line or a new sentence
+    if (/^\s*$|[.!?]\s+$/.test(line.slice(0, m.index))) word = word.charAt(0).toUpperCase() + word.slice(1);
+    segs.push({ text: word, filled: true });
     last = m.index + m[0].length;
   }
   if (last < line.length) segs.push({ text: line.slice(last), filled: false });
@@ -106,6 +189,9 @@ export function fillLine(line, words) {
 }
 
 export const segsToText = (segs) => segs.map((s) => s.text).join('');
+
+/** How long a line's reading direction is shown, alone, before the line itself appears. */
+export const CUE_MS = 2000;
 
 /** How long a line stays on screen: scaled by word count. */
 export function lineDurationMs(text) {

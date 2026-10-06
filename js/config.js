@@ -3,5 +3,5 @@
 export const SUPABASE_URL = 'https://yoprpszfqgwvygheygiz.supabase.co';
 export const SUPABASE_KEY = 'sb_publishable_PK05JRewbszhw-BRoQeg7g_JxrOQXqT';
 
-// Name shown on the video's end card and in share messages.
+// Name shown in the watch page's tab title.
 export const SITE_NAME = 'Braaainshow!?';

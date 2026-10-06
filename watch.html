@@ -14,10 +14,6 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="site-header">
-    <a href="./" class="logo">Braaain<span>show!?</span></a>
-  </header>
-
   <main>
     <section id="loading" class="view-center">
       <div class="spinner" aria-hidden="true"></div>
@@ -38,9 +34,10 @@
       <h2>Share it</h2>
       <div id="w-share" class="share"></div>
 
-      <details class="script">
-        <summary>Read the script</summary>
+      <details class="script" id="w-script">
+        <summary id="w-script-title">Read the script</summary>
         <ol id="w-lines"></ol>
+        <div id="w-fulltext" hidden></div>
       </details>
 
       <div class="cta">

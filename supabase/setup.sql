@@ -1,5 +1,6 @@
--- Braaainshow!?: one-time Supabase setup
+-- Braaainshow!?: Supabase setup
 -- Paste this whole file into Supabase → SQL Editor → New query → Run.
+-- Safe to run again after changes: it keeps existing recordings and videos.
 
 -- 1. Table for saved madlibs + recordings -------------------------------
 create table if not exists public.recordings (
@@ -27,17 +28,20 @@ create policy "anyone can insert"
   with check (true);
 
 -- 2. Lookup function for the watch page ---------------------------------
--- Returns ONE recording by id, without the email column.
-create or replace function public.get_recording(rid uuid)
+-- Returns ONE recording by id, without the email column. The words are included so the
+-- watch page can show the full madlib with the reader's answers filled in.
+-- (Dropped first because its returned columns changed; "create or replace" can't do that.)
+drop function if exists public.get_recording(uuid);
+create function public.get_recording(rid uuid)
 returns table (
-  id uuid, title text, name text, lines jsonb, video_path text, created_at timestamptz
+  id uuid, template_id text, title text, name text, words jsonb, lines jsonb, video_path text, created_at timestamptz
 )
 language sql
 stable
 security definer
 set search_path = public
 as $$
-  select r.id, r.title, r.name, r.lines, r.video_path, r.created_at
+  select r.id, r.template_id, r.title, r.name, r.words, r.lines, r.video_path, r.created_at
   from public.recordings r
   where r.id = rid;
 $$;

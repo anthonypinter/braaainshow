@@ -14,17 +14,47 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="site-header">
-    <a href="./" class="logo">Braaain<span>show!?</span></a>
-  </header>
-
   <main>
     <div id="config-warning" class="notice notice-error" hidden>
       Supabase isn’t set up yet. Add your project URL and key to <code>js/config.js</code> (see README).
     </div>
 
+    <!-- 0. Welcome -->
+    <section class="view view-intro" data-view="intro">
+      <h1 class="intro-title" aria-label="BRAAAINSHOW!?"><span>BRAAAIN</span><wbr><span>SHOW!?</span></h1>
+      <div class="intro-step" id="intro-welcome">
+        <p class="lead">We at the Glorious Revolutionary Microrepublic of Whaaat!? welcomes your interest in becoming a contestant on our national hit game show, BRAAAINSHOW!?</p>
+        <p class="lead">This application will ask you to demonstrate the two skills that all BRAAAINSHOW!? contestants must demonstrate: <span class="hl">WORDS</span> and <span class="hl">CHARISMA</span>.</p>
+        <button type="button" id="intro-ok" class="btn btn-primary btn-block">OK!</button>
+      </div>
+      <div class="intro-step" id="intro-words" hidden>
+        <h2 class="intro-part">Part 1: <span class="hl">WORDS</span></h2>
+        <p class="lead">In this section, you’ll be asked to answer a series of prompts for various types of words (like a Mad Lib). Don’t think too long about your answers, just type your response and hit ENTER for the next prompt. Let’s try a warm up exercise to get you started.</p>
+        <button type="button" id="intro-go" class="btn btn-primary btn-block">Let’s go!</button>
+      </div>
+      <div class="intro-step" id="intro-warmup" hidden>
+        <form id="warmup-form" class="intro-step" autocomplete="off" novalidate>
+          <label for="warmup-input" id="warmup-prompt" class="warmup-prompt"></label>
+          <input id="warmup-input" class="warmup-input" type="text" maxlength="80" enterkeyhint="next"
+                 autocapitalize="off" autocorrect="off" spellcheck="false">
+          <p class="warmup-count" id="warmup-count"></p>
+        </form>
+      </div>
+      <div class="intro-step" id="intro-warmup-done" hidden>
+        <p class="lead">Great! That took you <span class="hl" id="warmup-time"></span>. Remember not to over think it.</p>
+        <p class="lead">Let’s do the real test now. Take a deep breath, and click this button when you’re ready to begin.</p>
+        <button type="button" id="intro-ready" class="btn btn-primary btn-block">I’m ready!</button>
+      </div>
+      <div class="intro-step" id="intro-charisma" hidden>
+        <h2 class="intro-part">Now, for part two of the test: <span class="hl">CHARISMA</span>.</h2>
+        <p class="lead">We’ve taken the words you just input and created a custom version of the BRAAAINSHOW!? Theme that you’ll now perform on camera. To do this part, you’ll need to enable sound and video access.</p>
+        <div id="perm-help" class="notice notice-error perm-help" hidden></div>
+        <button type="button" id="perm-btn" class="btn btn-primary btn-block">Enable camera &amp; sound</button>
+      </div>
+    </section>
+
     <!-- 1. Pick a madlib -->
-    <section class="view" data-view="pick">
+    <section class="view" data-view="pick" hidden>
       <h1>Pick a madlib</h1>
       <p class="lead">Fill in the blanks, then read your story on camera — one take, no retakes.</p>
       <div id="template-list" class="card-list"></div>
@@ -32,38 +62,74 @@
 
     <!-- 2. Fill in the blanks -->
     <section class="view" data-view="fill" hidden>
-      <button type="button" class="back-link" data-go="pick">← Pick a different one</button>
+      <button type="button" id="fill-back" class="back-link" data-go="pick">← Pick a different one</button>
       <h1 id="fill-title"></h1>
-      <p class="lead">Don’t peek at the story — just fill in the blanks.</p>
+      <p class="lead" id="fill-lead">Don’t peek at the story — just fill in the blanks.</p>
       <form id="fill-form" novalidate>
         <div id="blank-fields" class="fields"></div>
-        <h2 class="form-section">About you</h2>
-        <div class="fields">
+        <div class="fields fields-about">
           <label class="field">
             <span>Your name <small>(shown with your video)</small></span>
             <input name="__name" type="text" autocomplete="name" maxlength="80" required>
           </label>
           <label class="field">
-            <span>Your email <small>(kept private)</small></span>
+            <span>Your email <small>(just so we can contact you if you win)</small></span>
             <input name="__email" type="email" autocomplete="email" maxlength="254" required>
           </label>
         </div>
         <p id="fill-error" class="form-error" hidden></p>
-        <button type="submit" class="btn btn-primary btn-block">Save my madlib</button>
+        <button type="submit" class="btn btn-primary btn-block">Continue</button>
       </form>
     </section>
 
     <!-- 3. Instructions -->
     <section class="view" data-view="ready" hidden>
-      <h1>Your madlib is ready.</h1>
-      <p class="lead">Here’s how the recording works:</p>
-      <ol class="steps">
-        <li><strong>One take.</strong> There’s no pause and no re-record — just go for it.</li>
-        <li><strong>Lines appear one at a time</strong> on screen and move on by themselves.</li>
-        <li><strong>Read each line out loud</strong> as soon as it appears. The words you picked are <span class="hl">highlighted</span>.</li>
-        <li><strong>Follow the direction</strong> under the video — it tells you <em>how</em> to read each line.</li>
-        <li><strong>Hold your phone upright</strong> at face height, somewhere bright and quiet.</li>
-        <li>When it ends, your video uploads and you get a link to share.</li>
+      <h1 class="intro-title" aria-label="BRAAAINSHOW!?"><span>BRAAAIN</span><wbr><span>SHOW!?</span></h1>
+      <h2 class="intro-part">Here’s how it works</h2>
+      <ol class="tutorial">
+        <li class="tut-step">
+          <div class="tut-art" aria-hidden="true">
+            <div class="tut-take"><span class="tut-rec">● REC</span><span class="tut-take-num">1</span><span class="tut-take-label">take</span></div>
+          </div>
+          <h3>One take</h3>
+          <p>There’s no pause and no re-record — just go for it.</p>
+        </li>
+        <li class="tut-step">
+          <div class="tut-art" aria-hidden="true">
+            <div class="mock-phone">
+              <div class="cue cue-big tut-cue-pop"><span class="cue-label">Read it</span><span class="cue-how">happy</span></div>
+            </div>
+          </div>
+          <h3>Watch for the direction</h3>
+          <p>Before each part, a direction pops up telling you <em>how</em> to read it.</p>
+        </li>
+        <li class="tut-step">
+          <div class="tut-art" aria-hidden="true">
+            <div class="mock-phone">
+              <div class="cue"><span class="cue-label">Read it</span><span class="cue-how">happy</span></div>
+              <div class="mock-line">We Like it!</div>
+              <div class="mock-timer"><div></div></div>
+            </div>
+          </div>
+          <h3>Read the line out loud</h3>
+          <p>Then the line appears — read it as soon as you see it. Words you typed show up <span class="hl">highlighted</span>, and lines move on by themselves.</p>
+        </li>
+        <li class="tut-step">
+          <div class="tut-art tut-icons" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><rect x="14" y="4" width="20" height="40" rx="4"/><circle cx="24" cy="10" r="1.6" class="fill"/></svg>
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="8"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6M11 11l4 4M33 33l4 4M11 37l4-4M33 15l4-4"/></svg>
+            <svg viewBox="0 0 48 48"><path d="M10 19h7l9-8v26l-9-8h-7z"/><path d="M33 19l10 10M43 19L33 29"/></svg>
+          </div>
+          <h3>Set up your shot</h3>
+          <p>Hold your phone upright at face height, somewhere bright and quiet.</p>
+        </li>
+        <li class="tut-step">
+          <div class="tut-art" aria-hidden="true">
+            <div class="tut-share"><svg viewBox="0 0 48 48"><path d="M20 28a7 7 0 0 0 10 0l7-7a7 7 0 0 0-10-10l-2 2"/><path d="M28 20a7 7 0 0 0-10 0l-7 7a7 7 0 0 0 10 10l2-2"/></svg><span>braaainshow…/watch</span></div>
+          </div>
+          <h3>Share it</h3>
+          <p>When it ends, your video uploads and you get a link to share.</p>
+        </li>
       </ol>
       <p id="camera-error" class="notice notice-error" hidden></p>
       <button type="button" id="camera-btn" class="btn btn-primary btn-block">Turn on camera</button>
@@ -77,6 +143,7 @@
           <span id="rec-badge" class="rec-badge" hidden>● REC</span>
           <span id="line-count" class="line-count"></span>
         </div>
+        <div id="cue" class="cue" hidden><span class="cue-label">Read it</span><span id="cue-how" class="cue-how"></span></div>
         <div id="countdown" class="countdown" hidden></div>
         <div class="line-timer" id="line-timer"><div id="line-timer-bar"></div></div>
       </div>
@@ -97,12 +164,15 @@
 
     <!-- 6. Done -->
     <section class="view" data-view="done" hidden>
-      <h1>That’s a wrap! 🎬</h1>
-      <p class="lead">Your video is live. Now send it to your friends — they’ll want to see this.</p>
-      <h2>Share it with friends</h2>
+      <h1 class="intro-title" aria-label="BRAAAINSHOW!?"><span>BRAAAIN</span><wbr><span>SHOW!?</span></h1>
+      <h2 class="intro-part">That’s a wrap!</h2>
+      <p class="lead">We’ve received your audition video to be the next contestant on Braaainshow!? If you’re selected, we’ll contact you via the email you provided us earlier.</p>
+      <details class="script fulltext" id="done-fulltext" hidden>
+        <summary>Read your Braaainshow!? theme song</summary>
+        <div id="done-fulltext-body"></div>
+      </details>
+      <h2>Share it with comrades</h2>
       <div id="done-share" class="share"></div>
-      <a id="watch-link" class="btn btn-secondary btn-block" href="#">Watch your video</a>
-      <button type="button" class="btn btn-ghost btn-block" data-go="pick">Make another madlib</button>
     </section>
   </main>
 

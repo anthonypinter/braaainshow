@@ -2,7 +2,7 @@
 // The canvas is both the on-screen preview and the thing being recorded,
 // so what the reader sees is exactly what ends up in the video.
 
-import { lineDurationMs, segsToText } from './templates.js';
+import { CUE_MS, lineDurationMs, segsToText } from './templates.js';
 
 // Order matters: H.264 MP4 plays on every phone, so try it first. A bare "video/mp4"
 // can mean VP9-in-MP4 on some Chromium builds, which iPhones can't play — so WebM
@@ -64,10 +64,13 @@ export class MadlibRecorder {
   }
 
   /**
-   * Record one continuous take: title card → each line (auto-advanced) → end card.
-   * onLine(index, total, ms) fires as each line appears (index === total for the end card).
+   * Record one continuous take of each line (auto-advanced), with no title or end cards.
+   * A line that starts a section (cueAt[i]) is preceded by a cue gap (no text on the video) so its
+   * reading direction can be shown first; the section's other lines follow straight on.
+   * onLine(index, total, ms, phase) fires as each phase starts: phase is 'cue' or 'line'
+   * (index === total once the last line is done).
    */
-  async perform({ title, name, lines, siteName }, onLine = () => {}) {
+  async perform({ lines, cueAt = [] }, onLine = () => {}) {
     const canvasStream = this.canvas.captureStream(30);
     const mixed = new MediaStream([
       ...canvasStream.getVideoTracks(),
@@ -87,21 +90,23 @@ export class MadlibRecorder {
       rec.onerror = (e) => reject(e.error || new Error('Recording failed'));
     });
 
-    this.setOverlay({ kind: 'title', title, name });
     rec.start(1000);
-    onLine(-1, lines.length, 2500);
-    await sleep(2500);
 
     for (let i = 0; i < lines.length; i++) {
+      if (cueAt[i] ?? true) {
+        this.setOverlay(null);
+        onLine(i, lines.length, CUE_MS, 'cue');
+        await sleep(CUE_MS);
+      }
+
       const ms = lineDurationMs(segsToText(lines[i]));
       this.setOverlay({ kind: 'line', segs: lines[i] });
-      onLine(i, lines.length, ms);
+      onLine(i, lines.length, ms, 'line');
       await sleep(ms);
     }
 
-    this.setOverlay({ kind: 'end', siteName });
-    onLine(lines.length, lines.length, 1800);
-    await sleep(1800);
+    this.setOverlay(null);
+    onLine(lines.length, lines.length, 0);
 
     rec.stop();
     await stopped;
@@ -144,8 +149,6 @@ export class MadlibRecorder {
     const o = this.overlay;
     if (!o) return;
     if (o.kind === 'line') this.drawLine(o);
-    else if (o.kind === 'title') this.drawCard(o.title, `read by ${o.name}`);
-    else if (o.kind === 'end') this.drawCard('The End', o.siteName);
   }
 
   drawLine(o) {
@@ -191,37 +194,6 @@ export class MadlibRecorder {
         x += tok.w;
       }
     });
-  }
-
-  drawCard(title, subtitle) {
-    const { ctx, canvas } = this;
-    const W = canvas.width;
-    const H = canvas.height;
-    const base = Math.min(W, H);
-    const tSize = base * 0.09;
-    const sSize = base * 0.045;
-
-    ctx.font = `800 ${tSize}px ${FONT}`;
-    const tW = Math.min(ctx.measureText(title).width, W * 0.86);
-    const boxW = Math.max(tW + base * 0.16, W * 0.6);
-    const boxH = tSize * 1.4 + (subtitle ? sSize * 1.8 : 0) + base * 0.08;
-    const boxX = (W - boxW) / 2;
-    const boxY = (H - boxH) / 2;
-
-    ctx.fillStyle = 'rgba(0,0,0,0.65)';
-    roundRect(ctx, boxX, boxY, boxW, boxH, tSize * 0.35);
-    ctx.fill();
-
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#fff';
-    ctx.font = `800 ${tSize}px ${FONT}`;
-    ctx.fillText(title, W / 2, boxY + base * 0.04 + tSize * 0.7, W * 0.86);
-    if (subtitle) {
-      ctx.fillStyle = ACCENT;
-      ctx.font = `600 ${sSize}px ${FONT}`;
-      ctx.fillText(subtitle, W / 2, boxY + base * 0.04 + tSize * 1.4 + sSize * 0.9, W * 0.86);
-    }
   }
 }
 

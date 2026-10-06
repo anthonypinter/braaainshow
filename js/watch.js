@@ -1,6 +1,7 @@
 import { getRecording, videoUrl, isConfigured } from './db.js';
 import { renderShare } from './share.js';
 import { SITE_NAME } from './config.js';
+import { MAIN_MADLIB, TEMPLATES, fullTextNodes } from './templates.js';
 
 const $ = (s) => document.querySelector(s);
 const id = new URLSearchParams(location.search).get('id');
@@ -36,10 +37,20 @@ function notFound(msg) {
       $('#w-byline').textContent += ' · (If it won’t play, try Chrome or update your browser.)';
   });
 
-  const lines = Array.isArray(rec.lines) ? rec.lines : [];
-  $('#w-lines').replaceChildren(
-    ...lines.map((l) => Object.assign(document.createElement('li'), { textContent: l }))
-  );
+  // the full madlib with their words filled in, when we have it; otherwise the recorded lines
+  const template = [MAIN_MADLIB, ...TEMPLATES].find((t) => t.id === rec.template_id);
+  if (template?.fullText && rec.words) {
+    $('#w-script').classList.add('fulltext');
+    $('#w-script-title').textContent = 'Read the Braaainshow!? theme song';
+    $('#w-lines').hidden = true;
+    $('#w-fulltext').hidden = false;
+    $('#w-fulltext').replaceChildren(...fullTextNodes(template.fullText, rec.words));
+  } else {
+    const lines = Array.isArray(rec.lines) ? rec.lines : [];
+    $('#w-lines').replaceChildren(
+      ...lines.map((l) => Object.assign(document.createElement('li'), { textContent: l }))
+    );
+  }
 
   renderShare($('#w-share'), { url: location.href, title: rec.title, name: rec.name });
 
