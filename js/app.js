@@ -52,6 +52,7 @@ if (!isConfigured) $('#config-warning').hidden = false;
 // ------------------------------------------------------------------ 0. welcome
 // OK! fades the welcome copy out (the heading stays put), then fades in Part 1.
 $('#intro-ok').addEventListener('click', async () => {
+  $('#intro-title').classList.remove('pulse'); // the heading only pulses on the very first screen
   await fadeOut($('#intro-welcome'));
   await fadeIn($('#intro-words'));
 });
@@ -301,6 +302,7 @@ if (new URLSearchParams(location.search).has('dev')) {
     $('[name="__name"]').value = 'Test';
     $('[name="__email"]').value = 'test@example.com';
     show('intro');
+    $('#intro-title').classList.remove('pulse');
     document.querySelectorAll('.view-intro > .intro-step').forEach((el) => {
       el.hidden = el.id !== 'intro-charisma';
       el.classList.remove('faded');
