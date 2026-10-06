@@ -7,10 +7,10 @@
   <meta name="description" content="Submit your audition for BRAAAINSHOW!?">
   <meta property="og:title" content="Braaainshow!?">
   <meta property="og:description" content="Submit your audition for BRAAAINSHOW!?">
-  <meta name="theme-color" content="#604118">
+  <meta name="theme-color" content="#f7f2df">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
 
     <!-- 0. Welcome -->
     <section class="view view-intro" data-view="intro">
-      <h1 class="intro-title pulse" id="intro-title" aria-label="BRAAAINSHOW!?"><span>BRAAAIN</span><wbr><span>SHOW!?</span></h1>
+      <h1 class="intro-title pulse" id="intro-title"><img class="logo" src="brainshowlogo.png" alt="BRAAAINSHOW!?" width="1066" height="299"></h1>
       <div class="intro-step" id="intro-welcome">
         <p class="lead">We at the Glorious Revolutionary Microrepublic of Whaaat!? welcomes your interest in becoming a contestant on our national hit game show, BRAAAINSHOW!?</p>
         <p class="lead">This application will ask you to demonstrate the two skills that all BRAAAINSHOW!? contestants must demonstrate: <span class="hl">WORDS</span> and <span class="hl">CHARISMA</span>.</p>
@@ -46,7 +46,7 @@
         <button type="button" id="intro-ready" class="btn btn-primary btn-block">I’m ready!</button>
       </div>
       <div class="intro-step" id="intro-charisma" hidden>
-        <h2 class="intro-part">Now, for part two of the test: <span class="hl">CHARISMA</span>.</h2>
+        <h2 class="intro-part intro-part-fit"><span class="nowrap">Now, for part two of the test:</span><br><span class="hl">CHARISMA</span>.</h2>
         <p class="lead">We’ve taken the words you just input and created a custom version of the BRAAAINSHOW!? Theme that you’ll now perform on camera. To do this part, you’ll need to enable sound and video access.</p>
         <div id="perm-help" class="notice notice-error perm-help" hidden></div>
         <button type="button" id="perm-btn" class="btn btn-primary btn-block">Enable camera &amp; sound</button>
@@ -84,7 +84,7 @@
 
     <!-- 3. Instructions -->
     <section class="view" data-view="ready" hidden>
-      <h1 class="intro-title" aria-label="BRAAAINSHOW!?"><span>BRAAAIN</span><wbr><span>SHOW!?</span></h1>
+      <h1 class="intro-title"><img class="logo" src="brainshowlogo.png" alt="BRAAAINSHOW!?" width="1066" height="299"></h1>
       <h2 class="intro-part">Here’s how it works</h2>
       <ol class="tutorial">
         <li class="tut-step">
@@ -125,7 +125,7 @@
         </li>
         <li class="tut-step">
           <div class="tut-art" aria-hidden="true">
-            <div class="tut-share"><svg viewBox="0 0 48 48"><path d="M20 28a7 7 0 0 0 10 0l7-7a7 7 0 0 0-10-10l-2 2"/><path d="M28 20a7 7 0 0 0-10 0l-7 7a7 7 0 0 0 10 10l2-2"/></svg><span>braaainshow…/watch</span></div>
+            <div class="tut-share"><svg viewBox="0 0 48 48"><path d="M20 28a7 7 0 0 0 10 0l7-7a7 7 0 0 0-10-10l-2 2"/><path d="M28 20a7 7 0 0 0-10 0l-7 7a7 7 0 0 0 10 10l2-2"/></svg><span>braaain.show/watch…</span></div>
           </div>
           <h3>Share it</h3>
           <p>When it ends, your video uploads and you get a link to share.</p>
@@ -164,14 +164,14 @@
 
     <!-- 6. Done -->
     <section class="view" data-view="done" hidden>
-      <h1 class="intro-title" aria-label="BRAAAINSHOW!?"><span>BRAAAIN</span><wbr><span>SHOW!?</span></h1>
+      <h1 class="intro-title"><img class="logo" src="brainshowlogo.png" alt="BRAAAINSHOW!?" width="1066" height="299"></h1>
       <h2 class="intro-part">That’s a wrap!</h2>
       <p class="lead">We’ve received your audition video to be the next contestant on Braaainshow!? If you’re selected, we’ll contact you via the email you provided us earlier.</p>
       <details class="script fulltext" id="done-fulltext" hidden>
         <summary>Read your Braaainshow!? theme song</summary>
         <div id="done-fulltext-body"></div>
       </details>
-      <h2>Share it with comrades</h2>
+      <h2>Share with your comrades</h2>
       <div id="done-share" class="share"></div>
     </section>
   </main>
