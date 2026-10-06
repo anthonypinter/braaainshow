@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Braaainshow!?</title>
+  <meta name="description" content="Fill in a madlib, then read it on camera in one take.">
+  <meta property="og:title" content="Braaainshow!?">
+  <meta property="og:description" content="Fill in a madlib, then read it on camera in one take.">
+  <meta name="theme-color" content="#604118">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="./" class="logo">Braaain<span>show!?</span></a>
+  </header>
+
+  <main>
+    <div id="config-warning" class="notice notice-error" hidden>
+      Supabase isn’t set up yet. Add your project URL and key to <code>js/config.js</code> (see README).
+    </div>
+
+    <!-- 1. Pick a madlib -->
+    <section class="view" data-view="pick">
+      <h1>Pick a madlib</h1>
+      <p class="lead">Fill in the blanks, then read your story on camera — one take, no retakes.</p>
+      <div id="template-list" class="card-list"></div>
+    </section>
+
+    <!-- 2. Fill in the blanks -->
+    <section class="view" data-view="fill" hidden>
+      <button type="button" class="back-link" data-go="pick">← Pick a different one</button>
+      <h1 id="fill-title"></h1>
+      <p class="lead">Don’t peek at the story — just fill in the blanks.</p>
+      <form id="fill-form" novalidate>
+        <div id="blank-fields" class="fields"></div>
+        <h2 class="form-section">About you</h2>
+        <div class="fields">
+          <label class="field">
+            <span>Your name <small>(shown with your video)</small></span>
+            <input name="__name" type="text" autocomplete="name" maxlength="80" required>
+          </label>
+          <label class="field">
+            <span>Your email <small>(kept private)</small></span>
+            <input name="__email" type="email" autocomplete="email" maxlength="254" required>
+          </label>
+        </div>
+        <p id="fill-error" class="form-error" hidden></p>
+        <button type="submit" class="btn btn-primary btn-block">Save my madlib</button>
+      </form>
+    </section>
+
+    <!-- 3. Instructions -->
+    <section class="view" data-view="ready" hidden>
+      <h1>Your madlib is ready.</h1>
+      <p class="lead">Here’s how the recording works:</p>
+      <ol class="steps">
+        <li><strong>One take.</strong> There’s no pause and no re-record — just go for it.</li>
+        <li><strong>Lines appear one at a time</strong> on screen and move on by themselves.</li>
+        <li><strong>Read each line out loud</strong> as soon as it appears. The words you picked are <span class="hl">highlighted</span>.</li>
+        <li><strong>Follow the direction</strong> under the video — it tells you <em>how</em> to read each line.</li>
+        <li><strong>Hold your phone upright</strong> at face height, somewhere bright and quiet.</li>
+        <li>When it ends, your video uploads and you get a link to share.</li>
+      </ol>
+      <p id="camera-error" class="notice notice-error" hidden></p>
+      <button type="button" id="camera-btn" class="btn btn-primary btn-block">Turn on camera</button>
+    </section>
+
+    <!-- 4. Record -->
+    <section class="view view-record" data-view="record" hidden>
+      <div class="stage" id="stage">
+        <canvas id="canvas"></canvas>
+        <div class="stage-top">
+          <span id="rec-badge" class="rec-badge" hidden>● REC</span>
+          <span id="line-count" class="line-count"></span>
+        </div>
+        <div id="countdown" class="countdown" hidden></div>
+        <div class="line-timer" id="line-timer"><div id="line-timer-bar"></div></div>
+      </div>
+      <div class="record-controls">
+        <p id="next-line" class="next-line">Get in frame, then tap start.</p>
+        <button type="button" id="start-btn" class="btn btn-record btn-block">Start recording</button>
+      </div>
+    </section>
+
+    <!-- 5. Uploading -->
+    <section class="view view-center" data-view="upload" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <h1 id="upload-title">Uploading your video…</h1>
+      <p class="lead" id="upload-msg">Keep this page open — this can take a minute on cellular.</p>
+      <p id="upload-error" class="notice notice-error" hidden></p>
+      <button type="button" id="retry-btn" class="btn btn-primary btn-block" hidden>Try again</button>
+    </section>
+
+    <!-- 6. Done -->
+    <section class="view" data-view="done" hidden>
+      <h1>That’s a wrap! 🎬</h1>
+      <p class="lead">Your video is live. Now send it to your friends — they’ll want to see this.</p>
+      <h2>Share it with friends</h2>
+      <div id="done-share" class="share"></div>
+      <a id="watch-link" class="btn btn-secondary btn-block" href="#">Watch your video</a>
+      <button type="button" class="btn btn-ghost btn-block" data-go="pick">Make another madlib</button>
+    </section>
+  </main>
+
+  <!-- Camera feed source for the canvas. Kept "visible" (but tiny) so iOS keeps decoding frames. -->
+  <video id="camera" class="camera-source" playsinline muted autoplay></video>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

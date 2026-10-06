@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Watch this madlib — Braaainshow!?</title>
+  <meta name="description" content="Someone read a madlib on camera in one take. Watch it, then make your own.">
+  <meta property="og:title" content="Watch this madlib 😂">
+  <meta property="og:description" content="One take, no retakes. Watch it, then make your own.">
+  <meta name="theme-color" content="#604118">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="./" class="logo">Braaain<span>show!?</span></a>
+  </header>
+
+  <main>
+    <section id="loading" class="view-center">
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="lead">Loading video…</p>
+    </section>
+
+    <section id="missing" class="view-center" hidden>
+      <h1>Video not found</h1>
+      <p class="lead" id="missing-msg">This link may be broken or the video was removed.</p>
+      <a class="btn btn-primary" href="./">Make your own madlib</a>
+    </section>
+
+    <section id="watch" hidden>
+      <h1 id="w-title"></h1>
+      <p class="byline" id="w-byline"></p>
+      <video id="player" class="player" controls playsinline preload="metadata"></video>
+
+      <h2>Share it</h2>
+      <div id="w-share" class="share"></div>
+
+      <details class="script">
+        <summary>Read the script</summary>
+        <ol id="w-lines"></ol>
+      </details>
+
+      <div class="cta">
+        <p class="lead">Think you can do better?</p>
+        <a class="btn btn-primary btn-block" href="./">Make your own madlib</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/watch.js"></script>
+</body>
+</html>
