@@ -111,6 +111,7 @@ body.recording-mode .dev-tools { display: none; }
 /* the logo may spill past the 640px text column (centred on it) so it can be bigger than the text */
 .intro-title .logo { display: block; width: min(100vw - 24px, 780px); max-width: none; height: auto; margin-left: 50%; translate: -50%; }
 .intro-title.pulse { animation: title-pulse 1.6s ease-in-out infinite; }
+.intro-title .logo-link { display: block; }
 @keyframes title-pulse { 50% { scale: 1.06; } }
 @media (prefers-reduced-motion: reduce) { .intro-title.pulse { animation: none; } }
 .view-intro .lead { font-size: 1.1rem; }
@@ -340,12 +341,11 @@ body.recording-mode main { padding-top: max(8px, env(safe-area-inset-top)); max-
 
 /* --------------------------------------------------------- watch */
 .player {
-  width: 100%; max-height: 75dvh; border-radius: var(--radius); background: #000; display: block;
+  width: 100%; max-height: 75dvh; border-radius: var(--radius); background: #000; display: block; margin-bottom: 16px;
 }
 .byline { color: var(--accent); font-weight: 600; margin: 0 0 16px; }
 .script { margin-top: 24px; background: var(--card); border-radius: var(--radius); padding: 4px 18px; }
 .script summary { cursor: pointer; padding: 12px 0; font-weight: 600; }
 .script ol { list-style-position: inside; padding: 0; color: var(--ink-2); }
-.cta { margin-top: 28px; text-align: center; }
 .fulltext { margin: 0 0 8px; text-align: center; }
 .fulltext p { margin: 0 0 1em; line-height: 1.55; }

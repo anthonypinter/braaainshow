@@ -3,7 +3,7 @@
 // Use {key} in a line's text to drop in that blank's answer. A key can be reused.
 
 // Warm-up prompts, answered one at a time on the welcome screen.
-export const WARMUP = ['Noun', 'Action verb', 'Cute Animal', 'Human name', 'Horrible Food'];
+export const WARMUP = ['Noun', 'Action Verb', 'Cute Animal', 'Human Name', 'Horrible Food'];
 
 // The real test: these blanks are asked one at a time (like the warm-up), then fill the madlib.
 export const MAIN_MADLIB = {
@@ -33,38 +33,40 @@ export const MAIN_MADLIB = {
   // The whole theme as shown on the final screen: stanzas of lines, with the same {key} blanks.
   fullText: [
     [
-      'The {adj1} {sound} erupts from {geo} of brain',
-      'The {message} is issued, your {bodypart} in the chain!',
-      '{verb1} the piñata! {verb2} treasures insane!',
-      '{valuable} or {gross}? Your pleasure? Your pain?',
+      'The {adj1} {sound} erupts from the {geo} of pain',
+      'The {message} is issued, to {bodypart} and brain!',
+      '{verb1} the piñata! {verb2} treasures inside!',
+      '{valuable} or {gross}? Let’s go for a ride!',
     ],
     ['BRAAAINSHOW!?', 'Human {attribute} tested! Opponents all bested!'],
-    ['BRAAAINSHOW!?', '{food} digested! {person} arrested!'],
+    ['BRAAAINSHOW!?', '{food} digested! A {person} is arrested!'],
     [
-      'Braaainshow!',
-      '{verbing} and {fear} and {pets} and prizes and',
-      '{adj2} {pluralnoun} in all shapes and sizes on',
+      'Braaaaainshow!',
+      '{verbing} and {fear} and {pets} and prizes',
+      'and {adj2} {pluralnoun} of all shapes and sizes on…',
     ],
+    ['Braaainshow'],
     ['BRAAAINSHOW!?'],
-    ['(explosion sound)'],
+    ['Braaainshow.'],
+    ['funny explosion noise'],
   ],
   lines: [
     { text: 'We Like it!', how: 'happy' },
-    { text: 'The {adj1} {sound} erupts from {geo} of brain', how: 'Healthy Enthusiasm' },
-    { text: 'The {message} is issued, your {bodypart} in the chain!' },
-    { text: '{verb1} the piñata! {verb2} treasures insane!', how: 'MORE ENTHUSIASM' },
-    { text: '{valuable} or {gross}? Your pleasure? Your pain?' },
+    { text: 'The {adj1} {sound} erupts from the {geo} of pain', how: 'Healthy Enthusiasm' },
+    { text: 'The {message} is issued, to {bodypart} and brain!' },
+    { text: '{verb1} the piñata! {verb2} treasures inside!', how: 'MORE ENTHUSIASM' },
+    { text: '{valuable} or {gross}? Let’s go for a ride!' },
     { text: 'BRAAAINSHOW!?', how: 'IN A MUSICAL' },
     { text: 'Human {attribute} tested! Opponents all bested!' },
     { text: 'BRAAAINSHOW!?', how: 'ANGRY OLD MAN' },
-    { text: '{food} digested! {person} arrested!' },
-    { text: 'Braaainshow!', how: 'CHILDREN’S TV SHOW HOST' },
-    { text: '{verbing} and {fear} and {pets} and prizes and' },
-    { text: '{adj2} {pluralnoun} in all shapes and sizes on' },
+    { text: '{food} digested! A {person} is arrested!' },
+    { text: 'Braaaaainshow!', how: 'CHILDREN’S TV SHOW HOST' },
+    { text: '{verbing} and {fear} and {pets} and prizes' },
+    { text: 'and {adj2} {pluralnoun} of all shapes and sizes on…' },
     { text: 'Braaainshow', how: 'whispered like a secret' },
     { text: 'BRAAAINSHOW!?', how: 'SHOUTED IN TRIUMPH' },
-    { text: 'Braaainshow', how: 'As normal as possible' },
-    { text: 'make a funny explosion sound effect', how: 'with your mouth' },
+    { text: 'Braaainshow.', how: 'As normal as possible' },
+    { text: 'funny explosion noise', how: 'sound effect' },
   ],
 };
 

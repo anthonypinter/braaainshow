@@ -286,7 +286,8 @@ function prepareRecording(name, email, words) {
 }
 
 // Testing shortcuts: add ?dev to the URL for buttons that jump straight to the start of Part 2
-// (sample words and a test name/email filled in) or to the final screen. Hidden from regular visitors.
+// (sample words and a test name/email filled in), to the final screen, or to a sample watch page.
+// Hidden from regular visitors.
 if (new URLSearchParams(location.search).has('dev')) {
   const tools = Object.assign(document.createElement('div'), { className: 'dev-tools' });
   const devButton = (text, onClick) => {
@@ -315,6 +316,7 @@ if (new URLSearchParams(location.search).has('dev')) {
     state.id = 'test'; // not a real recording, so its watch link shows "Video not found"
     showDone();
   });
+  devButton('Go to watch page', () => location.assign('watch.html?dev'));
   document.body.append(tools);
 }
 

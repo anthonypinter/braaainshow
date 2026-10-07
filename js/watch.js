@@ -1,10 +1,10 @@
 import { getRecording, videoUrl, isConfigured } from './db.js';
 import { renderShare } from './share.js';
-import { SITE_NAME } from './config.js';
 import { MAIN_MADLIB, TEMPLATES, fullTextNodes } from './templates.js';
 
 const $ = (s) => document.querySelector(s);
-const id = new URLSearchParams(location.search).get('id');
+const params = new URLSearchParams(location.search);
+const id = params.get('id');
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function notFound(msg) {
@@ -14,6 +14,11 @@ function notFound(msg) {
 }
 
 (async () => {
+  // Testing shortcut: watch.html?dev shows the page with sample words and no video (see app.js).
+  if (params.has('dev') && !id) {
+    const words = Object.fromEntries(MAIN_MADLIB.blanks.map((b) => [b.key, b.label.toLowerCase()]));
+    return showRecording({ name: 'Test', title: MAIN_MADLIB.title, template_id: MAIN_MADLIB.id, words });
+  }
   if (!isConfigured) return notFound('This site isn’t connected to Supabase yet (see js/config.js).');
   if (!id || !UUID.test(id)) return notFound();
 
@@ -25,23 +30,23 @@ function notFound(msg) {
     return notFound('Couldn’t load the video. Check your connection and refresh.');
   }
   if (!rec) return notFound();
+  showRecording(rec);
+})();
 
-  document.title = `${rec.name} reads “${rec.title}” — ${SITE_NAME}`;
-  $('#w-title').textContent = rec.title;
-  $('#w-byline').textContent = `Read by ${rec.name}`;
-
+function showRecording(rec) {
   const player = $('#player');
-  player.src = videoUrl(rec.video_path);
+  if (rec.video_path) player.src = videoUrl(rec.video_path);
   player.addEventListener('error', () => {
-    if (rec.video_path.endsWith('.webm'))
-      $('#w-byline').textContent += ' · (If it won’t play, try Chrome or update your browser.)';
+    if (!rec.video_path.endsWith('.webm')) return;
+    $('#w-byline').textContent = 'If it won’t play, try Chrome or update your browser.';
+    $('#w-byline').hidden = false;
   });
 
   // the full madlib with their words filled in, when we have it; otherwise the recorded lines
   const template = [MAIN_MADLIB, ...TEMPLATES].find((t) => t.id === rec.template_id);
   if (template?.fullText && rec.words) {
     $('#w-script').classList.add('fulltext');
-    $('#w-script-title').textContent = 'Read the Braaainshow!? theme song';
+    $('#w-script-title').textContent = 'Read your Braaainshow!? theme song';
     $('#w-lines').hidden = true;
     $('#w-fulltext').hidden = false;
     $('#w-fulltext').replaceChildren(...fullTextNodes(template.fullText, rec.words));
@@ -52,8 +57,8 @@ function notFound(msg) {
     );
   }
 
-  renderShare($('#w-share'), { url: location.href, title: rec.title, name: rec.name });
+  renderShare($('#w-share'), { url: location.href, title: rec.title, name: rec.name, social: false });
 
   $('#loading').hidden = true;
   $('#watch').hidden = false;
-})();
+}

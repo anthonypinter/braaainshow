@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Watch this madlib — Braaainshow!?</title>
-  <meta name="description" content="Someone read a madlib on camera in one take. Watch it, then make your own.">
-  <meta property="og:title" content="Watch this madlib 😂">
-  <meta property="og:description" content="One take, no retakes. Watch it, then make your own.">
+  <title>Braaainshow!?</title>
+  <meta name="description" content="Submit your audition for BRAAAINSHOW!?">
+  <meta property="og:title" content="Braaainshow!?">
+  <meta property="og:description" content="Submit your audition for BRAAAINSHOW!?">
   <meta name="theme-color" content="#f7f2df">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,24 +15,23 @@
 </head>
 <body>
   <main>
-    <section id="loading" class="view-center">
+    <h1 class="intro-title"><a href="./" class="logo-link"><img class="logo" src="brainshowlogo.svg" alt="BRAAAINSHOW!? home" width="1513" height="482"></a></h1>
+
+    <section id="loading">
       <div class="spinner" aria-hidden="true"></div>
       <p class="lead">Loading video…</p>
     </section>
 
-    <section id="missing" class="view-center" hidden>
-      <h1>Video not found</h1>
+    <section id="missing" hidden>
+      <h2 class="intro-part">Video not found</h2>
       <p class="lead" id="missing-msg">This link may be broken or the video was removed.</p>
-      <a class="btn btn-primary" href="./">Make your own madlib</a>
+      <a class="btn btn-primary btn-block" href="./">Make your own madlib</a>
     </section>
 
     <section id="watch" hidden>
-      <h1 id="w-title"></h1>
-      <p class="byline" id="w-byline"></p>
+      <h2 class="intro-part">That’s a wrap!</h2>
       <video id="player" class="player" controls playsinline preload="metadata"></video>
-
-      <h2>Share it</h2>
-      <div id="w-share" class="share"></div>
+      <p class="byline" id="w-byline" hidden></p>
 
       <details class="script" id="w-script">
         <summary id="w-script-title">Read the script</summary>
@@ -40,10 +39,8 @@
         <div id="w-fulltext" hidden></div>
       </details>
 
-      <div class="cta">
-        <p class="lead">Think you can do better?</p>
-        <a class="btn btn-primary btn-block" href="./">Make your own madlib</a>
-      </div>
+      <h2>Share with your comrades</h2>
+      <div id="w-share" class="share"></div>
     </section>
   </main>
 
