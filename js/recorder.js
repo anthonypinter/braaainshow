@@ -17,8 +17,11 @@ const MIME_CANDIDATES = [
   'video/mp4',
 ];
 
-const ACCENT = '#BFC54A'; // rgb(191, 197, 74)
-const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+// Colors and font of the lyric box burned into the video, matching the site (css/style.css :root).
+const CARD = 'rgba(255, 251, 238, 0.92)'; // --card, slightly see-through
+const INK = '#0d0e10'; // --ink
+const ACCENT = '#ff4526'; // --accent (brand red): the words they typed
+const FONT = '"Montserrat Alternates", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export function recordingSupported() {
@@ -71,6 +74,8 @@ export class MadlibRecorder {
    * (index === total once the last line is done).
    */
   async perform({ lines, cueAt = [] }, onLine = () => {}) {
+    // the canvas can't use a web font until it has loaded, and lines are measured once
+    await document.fonts?.load(`700 40px ${FONT}`).catch(() => {});
     const canvasStream = this.canvas.captureStream(30);
     const mixed = new MediaStream([
       ...canvasStream.getVideoTracks(),
@@ -134,7 +139,7 @@ export class MadlibRecorder {
     const { ctx, canvas, video } = this;
     const W = canvas.width;
     const H = canvas.height;
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = INK;
     ctx.fillRect(0, 0, W, H);
 
     const vw = video.videoWidth;
@@ -178,7 +183,7 @@ export class MadlibRecorder {
     const boxX = (W - boxW) / 2;
     const boxY = H - boxH - H * 0.07;
 
-    ctx.fillStyle = 'rgba(0,0,0,0.62)';
+    ctx.fillStyle = CARD;
     roundRect(ctx, boxX, boxY, boxW, boxH, size * 0.4);
     ctx.fill();
 
@@ -189,7 +194,7 @@ export class MadlibRecorder {
       let x = (W - row.width) / 2;
       const y = boxY + padY + lineH * i + lineH / 2;
       for (const tok of row.tokens) {
-        ctx.fillStyle = tok.filled ? ACCENT : '#fff';
+        ctx.fillStyle = tok.filled ? ACCENT : INK;
         ctx.fillText(tok.text, x, y);
         x += tok.w;
       }
