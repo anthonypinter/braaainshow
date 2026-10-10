@@ -15,6 +15,7 @@ const state = {
   lines: [], // array of segment arrays
   hows: [], // reading direction for each line (carried over within a section)
   cueAt: [], // true where a new section starts, so its direction pops up first
+  durations: [], // ms override per line (undefined = timed by word count)
   warmupMs: 0, // time taken on the warm-up words (not shown during it)
   wordsMs: 0, // time taken on the real madlib words
   blob: null,
@@ -216,7 +217,7 @@ $('#template-list').addEventListener('click', (e) => {
 
 function estimateSeconds(t) {
   const sample = Object.fromEntries(t.blanks.map((b) => [b.key, 'word']));
-  const ms = t.lines.reduce((sum, l) => sum + (l.how ? CUE_MS : 0) + lineDurationMs(segsToText(fillLine(l.text, sample))), 0);
+  const ms = t.lines.reduce((sum, l) => sum + (l.how ? CUE_MS : 0) + (l.ms ?? lineDurationMs(segsToText(fillLine(l.text, sample)))), 0);
   return Math.round(ms / 1000 / 5) * 5;
 }
 
@@ -279,6 +280,7 @@ function prepareRecording(name, email, words) {
   let how = '';
   state.hows = state.template.lines.map((l) => (how = l.how ?? how));
   state.cueAt = state.template.lines.map((l, i) => i === 0 || !!l.how);
+  state.durations = state.template.lines.map((l) => l.ms);
   state.id = crypto.randomUUID();
   state.blob = null;
   state.videoPath = null;
@@ -383,7 +385,7 @@ $('#start-btn').addEventListener('click', async () => {
 
   try {
     state.blob = await recorder.perform(
-      { lines: state.lines, cueAt: state.cueAt },
+      { lines: state.lines, cueAt: state.cueAt, durations: state.durations },
       (i, n, ms, phase) => {
         const inLine = i >= 0 && i < n;
         $('#line-count').textContent = inLine ? `Line ${i + 1} of ${n}` : '';

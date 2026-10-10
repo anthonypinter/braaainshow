@@ -71,9 +71,9 @@ export class MadlibRecorder {
    * A line that starts a section (cueAt[i]) is preceded by a cue gap (no text on the video) so its
    * reading direction can be shown first; the section's other lines follow straight on.
    * onLine(index, total, ms, phase) fires as each phase starts: phase is 'cue' or 'line'
-   * (index === total once the last line is done).
+   * (index === total once the last line is done). durations[i], when set, overrides line i's on-screen time.
    */
-  async perform({ lines, cueAt = [] }, onLine = () => {}) {
+  async perform({ lines, cueAt = [], durations = [] }, onLine = () => {}) {
     // the canvas can't use a web font until it has loaded, and lines are measured once
     await document.fonts?.load(`700 40px ${FONT}`).catch(() => {});
     const canvasStream = this.canvas.captureStream(30);
@@ -104,7 +104,7 @@ export class MadlibRecorder {
         await sleep(CUE_MS);
       }
 
-      const ms = lineDurationMs(segsToText(lines[i]));
+      const ms = durations[i] ?? lineDurationMs(segsToText(lines[i]));
       this.setOverlay({ kind: 'line', segs: lines[i] });
       onLine(i, lines.length, ms, 'line');
       await sleep(ms);

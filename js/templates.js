@@ -30,6 +30,7 @@ export const MAIN_MADLIB = {
   ],
   // A line with `how` starts a new section: its direction pops up first. Lines without `how`
   // continue the same section straight away, with the direction still shown.
+  // A line with `ms` stays on screen that long instead of the word-count timing.
   // The whole theme as shown on the final screen: stanzas of lines, with the same {key} blanks.
   fullText: [
     [
@@ -63,10 +64,10 @@ export const MAIN_MADLIB = {
     { text: 'Braaaaainshow!', how: 'CHILDREN’S TV SHOW HOST' },
     { text: '{verbing} and {fear} and {pets} and prizes' },
     { text: 'and {adj2} {pluralnoun} of all shapes and sizes on…' },
-    { text: 'Braaainshow', how: 'whispered like a secret' },
-    { text: 'BRAAAINSHOW!?', how: 'SHOUTED IN TRIUMPH' },
-    { text: 'Braaainshow.', how: 'As normal as possible' },
-    { text: 'funny explosion noise', how: 'sound effect' },
+    { text: 'Braaainshow', how: 'whispered like a secret', ms: 2000 },
+    { text: 'BRAAAINSHOW!?', how: 'SHOUTED IN TRIUMPH', ms: 2000 },
+    { text: 'Braaainshow.', how: 'As normal as possible', ms: 2000 },
+    { text: 'funny explosion noise', how: 'sound effect', ms: 2000 },
   ],
 };
 
